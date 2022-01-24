@@ -1,0 +1,27 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About this site",
+      "description": "Some additional details about the website",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2022-01-23T16:33:33-08:00"
+    },
+    {
+      "path": "blog.html",
+      "title": "Blog",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2022-01-23T16:33:33-08:00"
+    },
+    {
+      "path": "index.html",
+      "title": "Sam Kuglen",
+      "author": [],
+      "contents": "\n\n          \n          \n          kuglen\n          \n          \n          Home\n          About\n          Blog\n          ☰\n          \n          \n      \n        \n          \n            Sam Kuglen\n          \n          \n            \n              I am a graduate student at the Bren School of Environmental Science & Management at UC Santa Barbara. I like people, places, and things.\n            \n            \n              I am a graduate student at the Bren School of Environmental Science & Management at UC Santa Barbara. I like people, places, and things.\n            \n          \n\n          \n            \n              \n                  \n                    \n                      LinkedIn\n                    \n                  \n                \n                                \n                  \n                    \n                      Twitter\n                    \n                  \n                \n                                \n                  \n                    \n                      GitHub\n                    \n                  \n                \n                                \n                  \n                    \n                      Email\n                    \n                  \n                \n                              \n          \n\n          \n            \n              \n                                \n                  \n                    LinkedIn\n                  \n                \n                                \n                  \n                    Twitter\n                  \n                \n                                \n                  \n                    GitHub\n                  \n                \n                                \n                  \n                    Email\n                  \n                \n                              \n            \n          \n        \n      \n    \n\n    \n    \n    ",
+      "last_modified": "2022-01-23T16:33:34-08:00"
+    }
+  ],
+  "collections": ["posts/posts.json"]
+}

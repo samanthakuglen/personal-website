@@ -1,0 +1,18 @@
+---
+title: "Sam Kuglen"
+image: "self.jpg"
+site: distill::distill_website
+links:
+  - label: LinkedIn
+    url: "https://linkedin.com/in/samantha-kuglen/"
+  - label: Twitter
+    url: "https://twitter.com/samanthakuglen"
+  - label: GitHub
+    url: "https://github.com/samanthakuglen"
+  - label: Email
+    url: "mailto:samanthakuglen@bren.ucsb.edu"
+output:
+  postcards::trestles
+---
+ 
+I am a graduate student at the Bren School of Environmental Science & Management at UC Santa Barbara. I am studying Conservation Planning and Coastal Marine Resources Management.  
