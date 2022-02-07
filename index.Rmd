@@ -15,4 +15,4 @@ output:
   postcards::trestles
 ---
  
-I am a graduate student at the Bren School of Environmental Science & Management at UC Santa Barbara. I am studying Conservation Planning and Coastal Marine Resources Management.  
+I am currently a graduate student at the University of California, Santa Barbara Bren School. As an undergraduate, I primarily studied the effects of regional wastewater treatment discharge on the marine environment. Most recently, I worked at Point Reyes National Seashore in partnership with Americorps and the National Park Service and conducted life-cycle monitoring of federally endangered salmonids. At Bren, I am specializing in Coastal Resources Management to address how human pollutants and climate variability affect ocean environments. I aspire to help agencies make informed decisions in coastal marine resource use and ecological management.  
