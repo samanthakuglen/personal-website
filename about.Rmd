@@ -1,7 +1,7 @@
 ---
 title: "About this site"
 description: |
-  This website was created as part of the UC Santa Barbara Bren School course, ESM 244.  More details and highlights of my work coming soon! 
+  This website was created as part of the UC Santa Barbara Bren School course, ESM 244. 
 ---
 
 ```{r setup, include=FALSE}
