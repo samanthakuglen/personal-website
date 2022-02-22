@@ -3,32 +3,31 @@
     {
       "path": "about.html",
       "title": "About this site",
-      "description": "This website was created as part of the UC Santa Barbara Bren School course, ESM 244.  More details and highlights of my work coming soon! ",
+      "description": "This website was created as part of the UC Santa Barbara Bren School course, ESM 244. ",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2022-02-06T23:06:17-08:00"
+      "last_modified": "2022-02-21T21:37:56-08:00"
     },
     {
       "path": "blog.html",
       "title": "Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2022-02-06T23:06:17-08:00"
+      "last_modified": "2022-02-21T21:37:56-08:00"
     },
     {
       "path": "cv.html",
       "title": "CV",
-      "description": "Draft of my CV (to be reformatted and expanded soon)",
       "author": [],
-      "contents": "\nEducation\nUniversity of California, Santa Barbara (UCSB)\nBren School of Environmental Science & Management\n4.00/4.00 GPA\nMaster of Environmental Science Management with a Specialization in Conservation Planning and Coastal Marine Resources Management\n\nUniversity of California, San Diego (UCSD)\nBachelor of Science in Marine Biology\nMinor in Environmental Studies\n\nWork Experience\nGraduate Student Reader – UCSB Environmental Studies Department\nSanta Barbara, CA (01/22 – 03/22)\n\nWatershed Stewards Program (WSP) – Americorps, National Park Service\nGolden Gate National Recreation Area & Point Reyes National Seashore & (10/20–08/21)\n\nResearch Assistant – NOAA Southwest Fisheries Science Center\nLa Jolla, CA (11/18–07/19)\n\nMarine Biology & Ocean Operations (MBOO) Intern – City of San Diego\nSan Diego, CA (10/17–10/18)\n\nSkills\nTechnical\nCommunication\nCertifications\nAwards\nBiological Sciences Undergraduate Excellence in Teaching Award 2018-2019\nOutreach and Involvement\nClinton Global Initiative University (CGI U) Conference 2018\nAlternative Breaks at UC San Diego\n\n\n\n",
-      "last_modified": "2022-02-06T23:06:17-08:00"
+      "contents": "\nEducation\nUniversity of California, Santa Barbara (UCSB) - Bren School of Environmental Science & Management\nMaster of Environmental Science Management with a Specialization in Conservation Planning and Coastal Marine Resources Management (4.00/4.00)\n\nUniversity of California, San Diego (UCSD)\nBachelor of Science in Marine Biology and Minor in Environmental Studies\n\nWork Experience\nGraduate Student Reader – UCSB Environmental Studies Department\nSanta Barbara, CA (01/22 – 03/22)\n\nWatershed Stewards Program (WSP) – Americorps, National Park Service\nGolden Gate National Recreation Area & Point Reyes National Seashore & (10/20–08/21)\n\nResearch Assistant – NOAA Southwest Fisheries Science Center\nLa Jolla, CA (11/18–07/19)\n\nMarine Biology & Ocean Operations (MBOO) Intern – City of San Diego\nSan Diego, CA (10/17–10/18)\n\nAwards\nBiological Sciences Undergraduate Excellence in Teaching Award 2018-2019\nOutreach and Involvement\nClinton Global Initiative University (CGI U) Conference 2018\nAlternative Breaks at UC San Diego\n\n\n\n",
+      "last_modified": "2022-02-21T21:37:57-08:00"
     },
     {
       "path": "index.html",
       "title": "Sam Kuglen",
       "author": [],
       "contents": "\n\n          \n          \n          kuglen\n          \n          \n          Home\n          About\n          Blog\n          CV\n          ☰\n          \n          \n      \n        \n          \n            \n              \n            \n              Sam Kuglen\n            \n            \n              \n                \n                    \n                      \n                        LinkedIn\n                      \n                    \n                  \n                                    \n                    \n                      \n                        Twitter\n                      \n                    \n                  \n                                    \n                    \n                      \n                        GitHub\n                      \n                    \n                  \n                                    \n                    \n                      \n                        Email\n                      \n                    \n                  \n                                  \n            \n          \n        \n        \n        \n          \n            I am currently a graduate student at the University of California, Santa Barbara Bren School. As an undergraduate, I primarily studied the effects of regional wastewater treatment discharge on the marine environment. Most recently, I worked at Point Reyes National Seashore in partnership with Americorps and the National Park Service and conducted life-cycle monitoring of federally endangered salmonids. At Bren, I am specializing in Coastal Resources Management to address how human pollutants and climate variability affect ocean environments. I aspire to help agencies make informed decisions in coastal marine resource use and ecological management.\n          \n        \n      \n    \n\n    \n      \n        \n          \n            \n              \n            \n              Sam Kuglen\n            \n            \n              \n                \n                                    \n                    \n                      LinkedIn\n                    \n                  \n                                    \n                    \n                      Twitter\n                    \n                  \n                                    \n                    \n                      GitHub\n                    \n                  \n                                    \n                    \n                      Email\n                    \n                  \n                                  \n              \n            \n            \n              I am currently a graduate student at the University of California, Santa Barbara Bren School. As an undergraduate, I primarily studied the effects of regional wastewater treatment discharge on the marine environment. Most recently, I worked at Point Reyes National Seashore in partnership with Americorps and the National Park Service and conducted life-cycle monitoring of federally endangered salmonids. At Bren, I am specializing in Coastal Resources Management to address how human pollutants and climate variability affect ocean environments. I aspire to help agencies make informed decisions in coastal marine resource use and ecological management.\n            \n        \n      \n    \n\n    \n    \n    ",
-      "last_modified": "2022-02-06T23:06:17-08:00"
+      "last_modified": "2022-02-21T21:37:57-08:00"
     }
   ],
   "collections": ["posts/posts.json"]
