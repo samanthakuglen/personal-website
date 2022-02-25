@@ -11,6 +11,7 @@ links:
     url: "https://github.com/samanthakuglen"
   - label: Email
     url: "mailto:samanthakuglen@ucsb.edu"
+
 output:
   postcards::jolla_anim
 ---
