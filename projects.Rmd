@@ -1,6 +1,6 @@
 ---
 title: "Projects"
 image: "Seawater.png"
-description: Data science project portfolio
+description: testData science project portfolio
 ---
 [Click Here](Model%20Selection%20of%20CalCOFI%20Seawater%20Sample%20Data.html) to view my project exploring CalCOFI Seawater Sample Data
