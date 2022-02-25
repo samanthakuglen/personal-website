@@ -15,5 +15,4 @@ links:
 output:
   postcards::jolla_anim
 ---
-
-Current graduate student at the UC Santa Barbara Bren School, Master of Environmental Science & Management program. I am passionate about addressing how human pollutants and climate variability affect ocean ecosystems and fisheries management. I aspire to help agencies make informed decisions in coastal marine resource use and ecological management.  
+Current graduate student at the UC Santa Barbara Bren School, Master of Environmental Science & Management program. I am passionate about addressing how human pollutants and climate variability affect ocean ecosystems and fisheries management. I aspire to help agencies make informed decisions in coastal marine resource use and ecological management. 
