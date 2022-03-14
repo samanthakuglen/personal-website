@@ -2,6 +2,7 @@
 title: "CV"
 description: |
 ---
+[Click Here](Samantha_Kuglen_Resume.pdf) to view a PDF of my CV. 
 
 # Education
 
