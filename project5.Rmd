@@ -28,7 +28,6 @@ This code analyzes data from the Willamette Falls fish ladder on the historic Wi
 Map Source: [U.S. Army Corps of Engineers: "Draft Willamette Falls Locks Integrated Disposition Study and Environmental Assessment"](https://www.nwp.usace.army.mil/willamette/locks/)
 
 
-## B. Data and Analysis {.tabset .tabset-pills}
 **Data Citation**: Data were shared by and accessed from [Columbia River DART (Data Access in Real Time)](http://www.cbr.washington.edu/dart/query/adult_graph_text), with contributors of of U.S. Army Corps of Engineers, NWD and Chelan, Douglas, and Grant County PUDs, Yakima Klickitat Fisheries Project, Colville Tribes Fish & Wildlife (OBMEP), Oregon Department of Fish & Wildlife, Washington Department of Fish & Wildlife
 
 ```{r}
