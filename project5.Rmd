@@ -22,7 +22,7 @@ library(slider)
 This code analyzes data from the Willamette Falls fish ladder on the historic Willamette Falls Locks, located on the west bank of the Willamette River in West Linn, Oregon. Here, we focus on salmonids and their adult fish passage. 3 tabs are used to visually explore the data with through a time series, seasonplots, and annual counts by species, respectively. This data is important because can help inform regulations for the State of Oregon policy to "provide for the upstream and downstream passage for native migratory fish." 
 
 
-![](data/Willamette_Falls_Locks_area_map.jpg){width="600" height="500" style="display: block; margin: 0 auto"}
+![](data/Willamette_Falls_Locks_area_map.jpg)
 
 
 Map Source: [U.S. Army Corps of Engineers: "Draft Willamette Falls Locks Integrated Disposition Study and Environmental Assessment"](https://www.nwp.usace.army.mil/willamette/locks/)
