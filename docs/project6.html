@@ -87,26 +87,29 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>kuglen: CV</title>
+  <title>kuglen: Project 6 -  Text Wrangling and Analysis </title>
 
+  <meta property="description" itemprop="description" content="Here is a sample coding project and report from the Bren course ESM 244."/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="kuglen: CV"/>
+  <meta property="og:title" content="kuglen: Project 6 -  Text Wrangling and Analysis "/>
   <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Here is a sample coding project and report from the Bren course ESM 244."/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="kuglen"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="kuglen: CV"/>
+  <meta property="twitter:title" content="kuglen: Project 6 -  Text Wrangling and Analysis "/>
+  <meta property="twitter:description" content="Here is a sample coding project and report from the Bren course ESM 244."/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["CV"]},{"type":"NULL"}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Project 6 -  Text Wrangling and Analysis "]},{"type":"character","attributes":{},"value":["Here is a sample coding project and report from the Bren course ESM 244.\n"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2377,7 +2380,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"CV","authors":[]}
+{"title":"Project 6 -  Text Wrangling and Analysis ","description":"Here is a sample coding project and report from the Bren course ESM 244.","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2404,8 +2407,8 @@ Projects
 <a href="project2.html">Project 2 - Parameter Estimation</a>
 <a href="project3.html">Project 3 - Salmon Outreach Video</a>
 <a href="project4.html">Project 4 - Mooring Outreach Video</a>
-<a href="project4.html">Project 5 - Willamette Falls Analysis</a>
-<a href="project4.html">Project 6 - Text Wrangling and Analysis</a>
+<a href="project5.html">Project 5 - Willamette Falls Analysis</a>
+<a href="project6.html">Project 6 - Text Wrangling and Analysis</a>
 </div>
 </div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
@@ -2417,54 +2420,114 @@ Projects
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>CV</h1>
+<h1>Project 6 - Text Wrangling and Analysis</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-
+<p><p>Here is a sample coding project and report from the Bren course ESM 244.</p></p>
 </div>
 
 
 <div class="d-article">
-<p><a href="Samantha_Kuglen_Resume.pdf">Click Here</a> to view a PDF of my CV.</p>
-<h1 id="education">Education</h1>
-<ul>
-<li><p>University of California, Santa Barbara (UCSB) - Bren School of Environmental Science &amp; Management</p>
-<ul>
-<li>Master of Environmental Science Management with a Specialization in Conservation Planning and Coastal Marine Resources Management (4.00/4.00)</li>
-</ul></li>
-<li><p>University of California, San Diego (UCSD)</p>
-<ul>
-<li>Bachelor of Science in Marine Biology and Minor in Environmental Studies</li>
-</ul></li>
-</ul>
-<h1 id="work-experience">Work Experience</h1>
-<ul>
-<li><p>Graduate Student Reader – UCSB Environmental Studies Department</p>
-<ul>
-<li>Santa Barbara, CA (01/22 – 03/22)</li>
-</ul></li>
-<li><p>Watershed Stewards Program (WSP) – Americorps, National Park Service</p>
-<ul>
-<li>Golden Gate National Recreation Area &amp; Point Reyes National Seashore &amp; (10/20–08/21)</li>
-</ul></li>
-<li><p>Research Assistant – NOAA Southwest Fisheries Science Center</p>
-<ul>
-<li>La Jolla, CA (11/18–07/19)</li>
-</ul></li>
-<li><p>Marine Biology &amp; Ocean Operations (MBOO) Intern – City of San Diego</p>
-<ul>
-<li>San Diego, CA (10/17–10/18)</li>
-</ul></li>
-</ul>
-<h1 id="awards">Awards</h1>
-<ul>
-<li>Biological Sciences Undergraduate Excellence in Teaching Award 2018-2019</li>
-</ul>
-<h1 id="outreach-and-involvement">Outreach and Involvement</h1>
-<ul>
-<li>Clinton Global Initiative University (CGI U) Conference 2018</li>
-<li>Alternative Breaks at UC San Diego</li>
-</ul>
+<h3 id="a.-overview">A. Overview</h3>
+<p>This code analyzes text from the book Anna Karenina, a novel by Leo Tolstoy, first published in 1878. The data is wrangled to get tokens into tidy format and stop words are removed. Then, a word cloud is used for a visualization of counts for the most frequently used words in the text. Finally, a sentiment analysis is performed for types of words used throughout the book.</p>
+<h3 id="b.-data-and-analysis">B. Data and Analysis</h3>
+<p><strong>Text Data Citation</strong>: Anna Karenina by Leo Tolstoy data acquired through <a href="https://www.gutenberg.org/ebooks/1399">Project Gutenberg</a> <strong>Citation for NRC lexicon</strong>: Crowdsourcing a Word-Emotion Association Lexicon, Saif Mohammad and Peter Turney, Computational Intelligence, 29 (3), 436-465, 2013. <strong>Citation for Sentiments lexicon</strong>: Julia Silge and David Robinson (<a href="https://www.tidytextmining.com/sentiment.html" class="uri">https://www.tidytextmining.com/sentiment.html</a>)</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Read in the data</span>
+<span class='va'>anna</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://docs.ropensci.org/pdftools/reference/pdftools.html'>pdf_text</a></span><span class='op'>(</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"data"</span>, <span class='st'>'anna.pdf'</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Get lines text</span>
+<span class='va'>anna_lines</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>anna</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>page <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>text_full <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_split.html'>str_split</a></span><span class='op'>(</span><span class='va'>anna</span>, pattern <span class='op'>=</span> <span class='st'>'\\n'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>text_full</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>text_full <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_trim.html'>str_trim</a></span><span class='op'>(</span><span class='va'>text_full</span><span class='op'>)</span><span class='op'>)</span> 
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Format by chapters, remove intro text</span>
+<span class='va'>anna_chapts</span> <span class='op'>&lt;-</span> <span class='va'>anna_lines</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='op'>-</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>33</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>chapter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>text_full</span>, <span class='st'>"Chapter"</span><span class='op'>)</span>, <span class='va'>text_full</span>, <span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html'>fill</a></span><span class='op'>(</span><span class='va'>chapter</span>, .direction <span class='op'>=</span> <span class='st'>'down'</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/separate.html'>separate</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='va'>chapter</span>, into <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ch"</span>, <span class='st'>"no"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>" "</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>chapter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/roman.html'>as.roman</a></span><span class='op'>(</span><span class='va'>no</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Get words from each chapter</span>
+<span class='va'>anna_words</span> <span class='op'>&lt;-</span> <span class='va'>anna_chapts</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>text_full</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>anna</span><span class='op'>)</span>
+
+<span class='va'>anna_wordcount</span> <span class='op'>&lt;-</span> <span class='va'>anna_words</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>chapter</span>, <span class='va'>word</span><span class='op'>)</span>
+
+<span class='co'># Remove stop words and "page" which shows up on every page</span>
+<span class='va'>anna_words_clean</span> <span class='op'>&lt;-</span> <span class='va'>anna_words</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>stop_words</span>, by <span class='op'>=</span> <span class='st'>'word'</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='st'>"page"</span><span class='op'>)</span>, <span class='op'>!</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='st'>"1.672"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>nonstop_counts</span> <span class='op'>&lt;-</span> <span class='va'>anna_words_clean</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>chapter</span>, <span class='va'>word</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h4 id="i.-top-5-words-of-each-chapter-in-the-first-and-last-10-chapters">I. Top 5 Words of Each Chapter in the First and Last 10 Chapters</h4>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Top 5 words in the first 10 chapters </span>
+<span class='va'>top_5_words_first_10</span> <span class='op'>&lt;-</span> <span class='va'>nonstop_counts</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>chapter</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>chapter</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>n</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'># Top 5 words in the last 10 chapters</span>
+<span class='va'>top_5_words_last_10</span> <span class='op'>&lt;-</span> <span class='va'>nonstop_counts</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>chapter</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>26</span><span class='op'>:</span><span class='fl'>35</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>chapter</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>n</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'># Plot top 10 and last 10 chapters  </span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>top_5_words_first_10</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>n</span>, y <span class='op'>=</span> <span class='va'>word</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_linedraw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"#43a6f7"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>chapter</span>, scales <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Word Count"</span>,
+       y <span class='op'>=</span> <span class='st'>"Word"</span>,
+       title <span class='op'>=</span> <span class='st'>"Top 5 Words in the First 10 Chapters of Anna Karenina"</span><span class='op'>)</span> <span class='op'>+</span>
+   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>plot.title <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>hjust <span class='op'>=</span> <span class='fl'>0.5</span>, face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span>,
+         plot.subtitle <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>hjust <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="project6_files/figure-html5/unnamed-chunk-5-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>top_5_words_last_10</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>n</span>, y <span class='op'>=</span> <span class='va'>word</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_linedraw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"#43a6f7"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>chapter</span>, scales <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Word Count"</span>,
+       y <span class='op'>=</span> <span class='st'>"Word"</span>,
+       title <span class='op'>=</span> <span class='st'>"Top 5 Words in the Last 10 Chapters of Anna Karenina"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>plot.title <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>hjust <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>,
+         plot.subtitle <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>hjust <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="project6_files/figure-html5/unnamed-chunk-5-2.png" width="624" /></p>
+</div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

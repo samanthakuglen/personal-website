@@ -1,0 +1,147 @@
+---
+title: "Project 5 - Willamette Falls Fish Passage "
+description: |
+  Here is a sample coding project and report from the Bren course ESM 244.
+output: 
+  distill::distill_article
+---
+
+### A. Overview 
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+library(tidyverse)
+library(here)
+library(lubridate)
+library(tsibble)
+library(patchwork)
+library(janitor)
+library(feasts)
+library(slider)
+```
+
+This code analyzes data from the Willamette Falls fish ladder on the historic Willamette Falls Locks, located on the west bank of the Willamette River in West Linn, Oregon. Here, we focus on salmonids and their adult fish passage. 3 tabs are used to visually explore the data with through a time series, seasonplots, and annual counts by species, respectively. This data is important because can help inform regulations for the State of Oregon policy to "provide for the upstream and downstream passage for native migratory fish." 
+
+
+![](data/Willamette_Falls_Locks_area_map.jpg){width="600" height="500" style="display: block; margin: 0 auto"}
+
+
+Map Source: [U.S. Army Corps of Engineers: "Draft Willamette Falls Locks Integrated Disposition Study and Environmental Assessment"](https://www.nwp.usace.army.mil/willamette/locks/)
+
+
+## B. Data and Analysis {.tabset .tabset-pills}
+**Data Citation**: Data were shared by and accessed from [Columbia River DART (Data Access in Real Time)](http://www.cbr.washington.edu/dart/query/adult_graph_text), with contributors of of U.S. Army Corps of Engineers, NWD and Chelan, Douglas, and Grant County PUDs, Yakima Klickitat Fisheries Project, Colville Tribes Fish & Wildlife (OBMEP), Oregon Department of Fish & Wildlife, Washington Department of Fish & Wildlife
+```{r}
+# Read in the data 
+salmon_data <- read_csv(here("data", "willamette_fish_passage.csv")) %>%
+  clean_names() %>% 
+  select("date", "coho", "jack_coho", "steelhead") %>% 
+  mutate(date = lubridate::mdy(date)) %>% 
+  group_by(date, coho, jack_coho, steelhead) %>% 
+  replace(is.na(.), 0) 
+  
+salmon_ts_long <- salmon_data %>% 
+  as_tsibble(key = NULL, index = date) %>% 
+  pivot_longer(cols = "coho":"steelhead",
+               names_to = "species",
+               values_to = "count") 
+
+```
+### Tab 1: Original Time Series
+```{r}
+# Filter for each species (Coho, Jack Coho, Steelhead) to be on separate panels 
+coho_panel <- salmon_ts_long %>% 
+  filter(species == "coho")
+
+jack_coho_panel <- salmon_ts_long %>% 
+  filter(species == "jack_coho")
+
+steelhead_panel <- salmon_ts_long %>% 
+  filter(species == "steelhead")
+
+# Create plots for each
+coho_plot <- ggplot(coho_panel, aes(x = date, y = count))+
+  geom_line(aes(color =  "#1aa5b8")) +
+  theme_linedraw()+
+  labs(x = "Date",
+       y = "Count",
+       title = "Coho") +
+  theme(legend.position = "none")
+  
+jack_plot <- ggplot(jack_coho_panel, aes(x = date, y = count))+
+  geom_line(aes(color =  "#1aa5b8")) +
+  theme_linedraw()+
+  labs(x = "Date",
+       y = "Count",
+       title = "Jack Coho") +
+  theme(legend.position = "none")
+
+steelhead_plot <- ggplot(steelhead_panel, aes(x = date, y = count))+
+  geom_line(aes(color =  "#1aa5b8")) +
+  theme_linedraw()+
+  labs(x = "Date",
+       y = "Count",
+       title = "Steelhead") +
+  theme(legend.position = "none")
+  
+# Combine plots using `patchwork` package
+tab_1_plots <- coho_plot / jack_plot / steelhead_plot
+
+tab_1_plots + 
+  plot_annotation(title = "Time Series of Adult Fish Passage at Willamette Fish Ladder") 
+
+```
+
+**Figure 1.**  Time series of counts by species of coho, jack coho, and steelhead salmonids on the Willamette fish ladder from 2001 to 2010. Note: different y-axis scales between species. Data: Columbia River DART.
+
+### Tab 2: Seasonplots
+```{r}
+# Create season plot 
+salmon_ts_long %>% 
+  mutate(species = case_when(
+    species == "coho" ~ "Coho",
+    species == "jack_coho" ~ "Jack Coho", 
+    species == "steelhead" ~ "Steelhead")) %>% 
+  gg_season(y = count, year.labels = TRUE, continuous = TRUE) +
+  theme_linedraw() +
+  labs(x = "Month", y = "Fish Count") +
+  labs(title = "Seasonplots of Adult Fish Passage Counts by Species", 
+       subtitle = "(2001 - 2010)") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+
+**Figure 2.** Seasonplots of adult fish passage counts by species of coho, jack coho, and steelhead salmonids on the Willamette fish ladder from 2001 and 2010. Data: Columbia River DART.
+
+### Tab 3: Annual counts by species 
+```{r}
+salmon_annual <- salmon_ts_long %>% 
+  index_by(year = ~year(.)) %>%
+  group_by(species) %>% 
+  summarize(salmon_annual_count = sum(count)) %>% 
+  mutate(species = case_when( # update for axis labels
+    species == "coho" ~ "Coho",
+    species == "jack_coho" ~ "Jack Coho", 
+    species == "steelhead" ~ "Steelhead")) 
+
+# Create annual count plot
+ggplot(salmon_annual, aes(x = year, y = salmon_annual_count)) +
+  theme_linedraw() +
+  geom_line(aes(color=species)) +
+  scale_x_continuous(n.breaks = 10) +
+  labs(title = "Annual Total Counts of Adult Fish Passage by Species",
+       subtitle = "(2000 - 2010)",
+       x = "Year",
+       y = "Count of adult fish passage",
+       color = "Species") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+
+**Figure 3.** Annual counts by species of adult fish passage of coho, jack coho, and steelhead salmonids on the Willamette fish ladder from 2001 and 2010. Data: Columbia River DART.
+
+
+
+
+
+
+

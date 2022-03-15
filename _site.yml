@@ -24,5 +24,9 @@ navbar:
         href: project3.html
       - text: "Project 4 - Mooring Outreach Video"
         href: project4.html
+      - text: "Project 5 - Willamette Falls Analysis"
+        href: project5.html
+      - text: "Project 6 - Text Wrangling and Analysis"
+        href: project6.html
         
 output: distill::distill_article

@@ -1,0 +1,111 @@
+---
+title: "Project 6 -  Text Wrangling and Analysis "
+description: |
+  Here is a sample coding project and report from the Bren course ESM 244.
+output: 
+  distill::distill_article
+---
+
+### A. Overview 
+This code analyzes text from the book Anna Karenina, a novel by Leo Tolstoy, first published in 1878. 
+The data is wrangled to get tokens into tidy format and stop words are removed. Then, a word cloud is used for a visualization of counts for the most frequently used words in the text. Finally, a sentiment analysis is performed for types of words used throughout the book. 
+
+```{r setup, include=FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+# Setup - Attach packages
+library(tidyverse)
+library(tidytext)
+library(textdata)
+library(pdftools)
+library(ggwordcloud)
+library(here)
+```
+
+### B. Data and Analysis
+
+**Text Data Citation**: Anna Karenina by Leo Tolstoy data acquired through [Project Gutenberg](https://www.gutenberg.org/ebooks/1399) **Citation for NRC lexicon**: Crowdsourcing a Word-Emotion Association Lexicon, Saif Mohammad and Peter Turney, Computational Intelligence, 29 (3), 436-465, 2013. **Citation for Sentiments lexicon**: Julia Silge and David Robinson (https://www.tidytextmining.com/sentiment.html)
+
+```{r}
+# Read in the data
+anna <- pdf_text(here("data", 'anna.pdf'))
+```
+
+```{r}
+# Get lines text
+anna_lines <- data.frame(anna) %>% 
+  mutate(page = 1:n()) %>%
+  mutate(text_full = str_split(anna, pattern = '\\n')) %>% 
+  unnest(text_full) %>% 
+  mutate(text_full = str_trim(text_full)) 
+```
+
+```{r}
+# Format by chapters, remove intro text
+anna_chapts <- anna_lines %>% 
+  slice(-(1:33)) %>% 
+  mutate(chapter = ifelse(str_detect(text_full, "Chapter"), text_full, NA)) %>% 
+  fill(chapter, .direction = 'down') %>% 
+  separate(col = chapter, into = c("ch", "no"), sep = " ") %>% 
+  mutate(chapter = as.numeric(as.roman(no)))
+
+```
+
+```{r}
+# Get words from each chapter
+anna_words <- anna_chapts %>% 
+  unnest_tokens(word, text_full) %>% 
+  select(-anna)
+
+anna_wordcount <- anna_words %>% 
+  count(chapter, word)
+
+# Remove stop words and "page" which shows up on every page
+anna_words_clean <- anna_words %>% 
+  anti_join(stop_words, by = 'word') %>% 
+  filter(!str_detect(word, "page"), !str_detect(word, "1.672"))
+
+nonstop_counts <- anna_words_clean %>% 
+  count(chapter, word)
+```
+
+#### I. Top 5 Words of Each Chapter in the First and Last 10 Chapters 
+
+```{r}
+# Top 5 words in the first 10 chapters 
+top_5_words_first_10 <- nonstop_counts %>% 
+  filter(chapter %in% c(1:10)) %>% 
+  group_by(chapter) %>% 
+  arrange(-n) %>% 
+  slice(1:5) %>%
+  ungroup()
+
+# Top 5 words in the last 10 chapters
+top_5_words_last_10 <- nonstop_counts %>% 
+  filter(chapter %in% c(26:35)) %>% 
+  group_by(chapter) %>% 
+  arrange(-n) %>% 
+  slice(1:5) %>%
+  ungroup()
+
+# Plot top 10 and last 10 chapters  
+ggplot(data = top_5_words_first_10, aes(x = n, y = word)) +
+  theme_linedraw() +
+  geom_col(fill = "#43a6f7") +
+  facet_wrap(~chapter, scales = "free") + 
+  labs(x = "Word Count",
+       y = "Word",
+       title = "Top 5 Words in the First 10 Chapters of Anna Karenina") +
+   theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+         plot.subtitle = element_text(hjust = 0.5))
+
+ggplot(data = top_5_words_last_10, aes(x = n, y = word)) +
+  theme_linedraw() +
+  geom_col(fill = "#43a6f7") +
+  facet_wrap(~chapter, scales = "free") +
+  labs(x = "Word Count",
+       y = "Word",
+       title = "Top 5 Words in the Last 10 Chapters of Anna Karenina") +
+  theme(plot.title = element_text(hjust = 0.5),
+         plot.subtitle = element_text(hjust = 0.5))
+```
+
