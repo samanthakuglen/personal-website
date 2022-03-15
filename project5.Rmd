@@ -30,6 +30,7 @@ Map Source: [U.S. Army Corps of Engineers: "Draft Willamette Falls Locks Integra
 
 ## B. Data and Analysis {.tabset .tabset-pills}
 **Data Citation**: Data were shared by and accessed from [Columbia River DART (Data Access in Real Time)](http://www.cbr.washington.edu/dart/query/adult_graph_text), with contributors of of U.S. Army Corps of Engineers, NWD and Chelan, Douglas, and Grant County PUDs, Yakima Klickitat Fisheries Project, Colville Tribes Fish & Wildlife (OBMEP), Oregon Department of Fish & Wildlife, Washington Department of Fish & Wildlife
+
 ```{r}
 # Read in the data 
 salmon_data <- read_csv(here("data", "willamette_fish_passage.csv")) %>%
@@ -46,7 +47,9 @@ salmon_ts_long <- salmon_data %>%
                values_to = "count") 
 
 ```
+
 ### Tab 1: Original Time Series
+
 ```{r}
 # Filter for each species (Coho, Jack Coho, Steelhead) to be on separate panels 
 coho_panel <- salmon_ts_long %>% 
@@ -113,6 +116,7 @@ salmon_ts_long %>%
 **Figure 2.** Seasonplots of adult fish passage counts by species of coho, jack coho, and steelhead salmonids on the Willamette fish ladder from 2001 and 2010. Data: Columbia River DART.
 
 ### Tab 3: Annual counts by species 
+
 ```{r}
 salmon_annual <- salmon_ts_long %>% 
   index_by(year = ~year(.)) %>%
