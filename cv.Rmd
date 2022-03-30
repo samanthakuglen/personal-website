@@ -3,9 +3,9 @@ title: "CV"
 description: |
 ---
 
-### [Click Here](Samantha_Kuglen_Resume.pdf) to view a PDF of my Resume.
+## [Click Here](Samantha_Kuglen_Resume.pdf) to view a PDF of my Resume.
 
-# Education
+### [Education]{.ul}
 
 University of California, Santa Barbara (UCSB) \| Bren School of Environmental Science & Management
 
@@ -15,21 +15,23 @@ University of California, San Diego (UCSD)
 
 -   Bachelor of Science in Marine Biology and Minor in Environmental Studies
 
-# Work Experience Overview
+### [Professional Experience Overview]{.ul}
 
--   Graduate Student Reader -- UCSB Environmental Studies Department
+-   Graduate Student TA -- UCSB Environmental Studies Department
 
 -   Watershed Stewards Program (WSP) -- Americorps, National Park Service
+
+-   Data Management Assistant - Scripps Institution of Oceanography
 
 -   Research Assistant -- NOAA Southwest Fisheries Science Center
 
 -   Marine Biology & Ocean Operations (MBOO) Intern -- City of San Diego
 
-# Awards
+### [Awards]{.ul}
 
 -   Biological Sciences Undergraduate Excellence in Teaching Award 2018-2019
 
-# Outreach and Involvement
+### [Outreach and Involvement]{.ul}
 
 -   Clinton Global Initiative University (CGI U) Conference 2018
 -   Alternative Breaks at UC San Diego

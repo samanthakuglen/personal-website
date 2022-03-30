@@ -1,7 +1,7 @@
 ---
-title: "Project 1 - Model Selection of CalCOFI Data"
+title: "Model Selection of CalCOFI Data"
 description: |
-  Here is a sample coding project and report from the Bren course ESM 244.
+  Sample coding project and report from the graduate Bren course ESM 244 - Advanced Data Analysis.
 output: 
   distill::distill_article
 ---
