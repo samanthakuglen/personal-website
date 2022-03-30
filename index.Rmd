@@ -13,6 +13,19 @@ links:
     url: "mailto:samanthakuglen@ucsb.edu"
 
 output:
-  postcards::jolla_anim
+  postcards::trestles
 ---
-I am a current graduate student at the UC Santa Barbara Bren School, Master of Environmental Science & Management program. I am passionate about addressing how human pollutants and climate variability affect ocean ecosystems and fisheries management. I aspire to help agencies make informed decisions in coastal marine resource use and ecological management. 
+
+## **Bio**
+
+Sam Kuglen is passionate about addressing how human pollutants and climate variability affect coastal ecosystems and fisheries management. She cares deeply about environmental justice and aims to be an advocate for underrepresented communities. Sam aspires to use her background in Marine Biology and Environmental Science Management to assist agencies in making informed decisions in coastal marine resource use and ecological preservation.
+
+## **Education**
+
+**University of California, Santa Barbara \| Bren School of Environmental Science & Management**
+
+Master of Environmental Science Management \| 2021 - 2023
+
+**University of California, San Diego**
+
+Bachelor of Science in Marine Biology \| \| 2015 - 2019

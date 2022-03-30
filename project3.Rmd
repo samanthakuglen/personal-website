@@ -1,7 +1,7 @@
 ---
-title: "Project 3 - Outreach Video"
+title: "Outreach Video"
 description: |
-  National Park Service Video about Coho Salmon and Steelhead Trout in the California Bay Area
+  Video produced for the National Park Service about Coho Salmon and Steelhead Trout in the California Bay Area
 output: 
   distill::distill_article
 ---

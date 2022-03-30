@@ -1,32 +1,28 @@
 name: "."
-title: "kuglen"
+title: "Home"
 theme: postcards.css
 description: |
   mfeo
 output_dir: "docs"
 navbar:
   right:
-    - text: "Home"
-      href: index.html
     - text: "About"
-      href: about.html
-    - text: "Blog"      # add
-      href: blog.html   # add
-    - text: "CV"
+      href: about.html  
+    - text: "Resume"
       href: cv.html
     - text: "Projects"
       menu:
-      - text: "Project 1 - Model Selection"
+      - text: "Data Project - Model Selection"
         href: projects.html
-      - text: "Project 2 - Parameter Estimation"
+      - text: "Data Project - Parameter Estimation"
         href: project2.html
-      - text: "Project 3 - Salmon Outreach Video"
-        href: project3.html
-      - text: "Project 4 - Mooring Outreach Video"
-        href: project4.html
-      - text: "Project 5 - Willamette Falls Analysis"
+      - text: "Data Project - Fish Population Analysis"
         href: project5.html
-      - text: "Project 6 - Text Wrangling and Analysis"
-        href: project6.html
+      - text: "Outreach Project - Endangered Salmon"
+        href: project3.html
+      - text: "Outreach Project - Mooring Recovery"
+        href: project4.html
+     
+
         
 output: distill::distill_article

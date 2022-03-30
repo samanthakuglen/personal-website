@@ -1,7 +1,7 @@
 ---
-title: "Project 4"
+title: "Outreach Video"
 description: |
-  Project 4 - Mooring Recovery and Repair Video at the City of San Diego
+  Video produced for the City of San Diego depicting Mooring Recovery and Repair.
 output: 
   distill::distill_article
 ---
@@ -13,4 +13,4 @@ library(vembedr)
 embed_url("https://youtu.be/UqIPjEeJ2wg")
 ```
 
-Here is a video I create to document a mooring recovery and repair by the City of San Diego Marine Biology and Ocean Operations in conjunction with Scripps Institution of Oceanography. There's some background ship noises... but volume is not necessary. 
+Here is a video I create to document a mooring recovery and repair by the City of San Diego Marine Biology and Ocean Operations in conjunction with Scripps Institution of Oceanography.  
