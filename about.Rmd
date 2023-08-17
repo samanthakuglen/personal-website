@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ![](water.jpg)
-In her most recent position, Sam served with Americorps in partnership with the National Park Service at Point Reyes National Seashore and Golden Gate National Recreation Area, monitoring endangered coho salmon and steelhead trout. In this photo, she is a sample for water quality measurements. 
+In her most recent position, Sam worked for the National Park Service at Point Reyes National Seashore and Golden Gate National Recreation Area, monitoring endangered coho salmon and steelhead trout. In this photo, she is a sample for water quality measurements. 
 
 ![](scuba.JPG)
 In her free time, Sam enjoys scuba diving and holds a PADI Advanced Open Water Certification. 

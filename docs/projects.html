@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,9 +74,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -457,8 +458,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
 
   <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-  <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
-  <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+  <link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet"/>
   <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
   <script src="site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
   <script src="site_libs/fuse-6.4.1/fuse.min.js"></script>
@@ -787,6 +788,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -1028,10 +1030,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     position: relative;
     margin-bottom: 2.5em;
     margin-top: 1.5em;
-  }
-
-  .figure img {
-    width: 100%;
   }
 
   .figure .caption {
@@ -1863,9 +1861,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
-          return "<p>" + $('#ref-' + ref).html() + "</p>";
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
         }).join("\n");
         window.tippy(this, {
           allowHTML: true,
@@ -1877,6 +1887,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1976,6 +2011,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -1998,7 +2035,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -2360,7 +2397,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     color: var(--hover-color, white);
   }</style>
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.23/header-attrs.js"></script>
   <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
   <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
   <link href="site_libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
@@ -2435,50 +2472,45 @@ Projects
 <p>The data contain observations from <a href="https://calcofi.org/ccdata.html">CalCOFI seawater sample data</a>. A 70+ year hydrographic time-series includes temperature, salinity, oxygen and phosphate observations, along with nutrient analysis of silicate, nitrate and nitrite. An AIC corrected (AICc) comparison between the two models is used to inform which model is a better fit, with preference for the model with lower AICc. Following AICc comparison of two linear regression models, a ten-fold cross validation is performed. The cross validation reserves a subset of data (test data) and trains our model using the rest (training data) to estimate the model parameters. All analyses are in R version 4.0.2 using RStudio version 1.3.1056.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/knitr/man/opts_chunk.html'>opts_chunk</a></span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span>echo <span class='op'>=</span> <span class='cn'>TRUE</span>, message <span class='op'>=</span> <span class='cn'>FALSE</span>, warning <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># Attach packages</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>AICcmodavg</span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://haozhu233.github.io/kableExtra/'>kableExtra</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/datalorax/equatiomatic'>equatiomatic</a></span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>knitr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/knitr/man/opts_chunk.html'>opts_chunk</a></span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span>echo <span class='op'>=</span> <span class='cn'>TRUE</span>, message <span class='op'>=</span> <span class='cn'>FALSE</span>, warning <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Attach packages</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>AICcmodavg</span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://haozhu233.github.io/kableExtra/'>kableExtra</a></span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Read in the data</span>
-<span class='va'>calcofi_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"data"</span>, <span class='st'>"calcofi_seawater_samples.csv"</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Read in the data</span></span>
+<span><span class='va'>calcofi_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"data"</span>, <span class='st'>"calcofi_seawater_samples.csv"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <h3 id="i.-aic-comparison-of-two-linear-regression-models">I. AIC Comparison of Two Linear Regression Models</h3>
 <p><strong>Model 1:</strong> Oxygen saturation as a function of water temperature, salinity, and phosphate concentration. <strong>Model 2:</strong> Oxygen saturation as a function of water temp, salinity, phosphate concentration, and depth.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Model 1 linear model with defined parameters</span>
-<span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='va'>o2sat</span> <span class='op'>~</span> <span class='va'>t_deg_c</span> <span class='op'>+</span> <span class='va'>salinity</span> <span class='op'>+</span> <span class='va'>po4u_m</span>
-<span class='va'>mdl1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f1</span>, data <span class='op'>=</span> <span class='va'>calcofi_data</span><span class='op'>)</span>
-
-<span class='co'># Model 2 linear model with defined parameters</span>
-<span class='va'>f2</span> <span class='op'>&lt;-</span> <span class='va'>o2sat</span> <span class='op'>~</span> <span class='va'>t_deg_c</span> <span class='op'>+</span> <span class='va'>salinity</span> <span class='op'>+</span> <span class='va'>po4u_m</span> <span class='op'>+</span> <span class='va'>depth_m</span>
-<span class='va'>mdl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f2</span>, data <span class='op'>=</span> <span class='va'>calcofi_data</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Model 1 linear model with defined parameters</span></span>
+<span><span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='va'>o2sat</span> <span class='op'>~</span> <span class='va'>t_deg_c</span> <span class='op'>+</span> <span class='va'>salinity</span> <span class='op'>+</span> <span class='va'>po4u_m</span></span>
+<span><span class='va'>mdl1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f1</span>, data <span class='op'>=</span> <span class='va'>calcofi_data</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Model 2 linear model with defined parameters</span></span>
+<span><span class='va'>f2</span> <span class='op'>&lt;-</span> <span class='va'>o2sat</span> <span class='op'>~</span> <span class='va'>t_deg_c</span> <span class='op'>+</span> <span class='va'>salinity</span> <span class='op'>+</span> <span class='va'>po4u_m</span> <span class='op'>+</span> <span class='va'>depth_m</span></span>
+<span><span class='va'>mdl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f2</span>, data <span class='op'>=</span> <span class='va'>calcofi_data</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <p>AICc is used to select the better model, with a consideration the difference of AICc between the two models.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Use `aictab` to compare the models </span>
-<span class='va'>aic_table</span> <span class='op'>&lt;-</span> <span class='fu'>AICcmodavg</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/AICcmodavg/man/aictab.html'>aictab</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>mdl1</span>, <span class='va'>mdl2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span><span class='st'>"Model"</span> <span class='op'>=</span> <span class='st'>"Modnames"</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>aic_table</span>,
-      caption <span class='op'>=</span> <span class='st'>"Table 1: Models 1 and 2 AIC corrected (AICc) Values"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_styling.html'>kable_styling</a></span><span class='op'>(</span>bootstrap_options <span class='op'>=</span> <span class='st'>"striped"</span>, 
-                full_width <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> 
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Use `aictab` to compare the models </span></span>
+<span><span class='va'>aic_table</span> <span class='op'>&lt;-</span> <span class='fu'>AICcmodavg</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/AICcmodavg/man/aictab.html'>aictab</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>mdl1</span>, <span class='va'>mdl2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span><span class='st'>"Model"</span> <span class='op'>=</span> <span class='st'>"Modnames"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>aic_table</span>,</span>
+<span>      caption <span class='op'>=</span> <span class='st'>"Table 1: Models 1 and 2 AIC corrected (AICc) Values"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_styling.html'>kable_styling</a></span><span class='op'>(</span>bootstrap_options <span class='op'>=</span> <span class='st'>"striped"</span>, </span>
+<span>                full_width <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> </span></code></pre>
 </div>
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
@@ -2581,63 +2613,59 @@ Mod1
 <p>Ten-fold cross validation is used with root-mean-square error (RMSE) as the scoring method and the final model is trained on the full dataset.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Assign number of folds and create a folds vector</span>
-<span class='va'>folds</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
-<span class='va'>fold_vec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='va'>folds</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>calcofi_data</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># Starting number to generate sequence of random numbers</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span>
-
-<span class='va'>seawater_fold</span> <span class='op'>&lt;-</span> <span class='va'>calcofi_data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>fold_vec</span>, size <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># First fold</span>
-<span class='va'>test_df</span> <span class='op'>&lt;-</span> <span class='va'>seawater_fold</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>group</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span> 
-<span class='va'>train_df</span> <span class='op'>&lt;-</span> <span class='va'>seawater_fold</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>group</span> <span class='op'>!=</span> <span class='fl'>1</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Assign number of folds and create a folds vector</span></span>
+<span><span class='va'>folds</span> <span class='op'>&lt;-</span> <span class='fl'>10</span></span>
+<span><span class='va'>fold_vec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='va'>folds</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>calcofi_data</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Starting number to generate sequence of random numbers</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>seawater_fold</span> <span class='op'>&lt;-</span> <span class='va'>calcofi_data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>fold_vec</span>, size <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># First fold</span></span>
+<span><span class='va'>test_df</span> <span class='op'>&lt;-</span> <span class='va'>seawater_fold</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>group</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span> </span>
+<span><span class='va'>train_df</span> <span class='op'>&lt;-</span> <span class='va'>seawater_fold</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>group</span> <span class='op'>!=</span> <span class='fl'>1</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <p>RMSE goes in reverse order of these operations - find error (predicted actual), square it, find the average, then take the square root.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Calculate the RMSE value</span>
-<span class='va'>calc_rmse</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>rmse_result</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='va'>x</span> <span class='op'>-</span> <span class='va'>y</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>  <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>  <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>rmse_result</span><span class='op'>)</span>
-<span class='op'>}</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Calculate the RMSE value</span></span>
+<span><span class='va'>calc_rmse</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='va'>rmse_result</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='va'>x</span> <span class='op'>-</span> <span class='va'>y</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>  <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>  <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span>  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>rmse_result</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span></code></pre>
 </div>
 </div>
 <p>The training dataset is used to create two linear regression models, based on the formulas above.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Training dataset is based on fold 1</span>
-<span class='va'>training_mdl1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f1</span>, data <span class='op'>=</span> <span class='va'>train_df</span><span class='op'>)</span>
-<span class='va'>training_mdl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f2</span>, data <span class='op'>=</span> <span class='va'>train_df</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Training dataset is based on fold 1</span></span>
+<span><span class='va'>training_mdl1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f1</span>, data <span class='op'>=</span> <span class='va'>train_df</span><span class='op'>)</span></span>
+<span><span class='va'>training_mdl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f2</span>, data <span class='op'>=</span> <span class='va'>train_df</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <p>The trained models are then used to predict on test data.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>predict_test</span> <span class='op'>&lt;-</span> <span class='va'>test_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>model1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>training_mdl1</span>, <span class='va'>test_df</span><span class='op'>)</span>,
-         model2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>training_mdl2</span>, <span class='va'>test_df</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># Calculate RMSE values</span>
-<span class='va'>rmse_predict_test</span> <span class='op'>&lt;-</span> <span class='va'>predict_test</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>rmse_mdl1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'>calc_rmse</span><span class='op'>(</span><span class='va'>model1</span>, <span class='va'>o2sat</span><span class='op'>)</span>, digits <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>,
-            rmse_mdl2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'>calc_rmse</span><span class='op'>(</span><span class='va'>model2</span>, <span class='va'>o2sat</span><span class='op'>)</span>, digits <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span> 
-
-<span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>rmse_predict_test</span>,
-      col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RMSE Model 1"</span>,
-              <span class='st'>"RMSE Model 2"</span><span class='op'>)</span>,
-      caption <span class='op'>=</span> <span class='st'>"Table 2: Test Data RMSE Values for Models 1 and 2"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_styling.html'>kable_styling</a></span><span class='op'>(</span>bootstrap_options <span class='op'>=</span> <span class='st'>"striped"</span>, 
-                full_width <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>predict_test</span> <span class='op'>&lt;-</span> <span class='va'>test_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>model1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>training_mdl1</span>, <span class='va'>test_df</span><span class='op'>)</span>,</span>
+<span>         model2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>training_mdl2</span>, <span class='va'>test_df</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Calculate RMSE values</span></span>
+<span><span class='va'>rmse_predict_test</span> <span class='op'>&lt;-</span> <span class='va'>predict_test</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>rmse_mdl1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'>calc_rmse</span><span class='op'>(</span><span class='va'>model1</span>, <span class='va'>o2sat</span><span class='op'>)</span>, digits <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>,</span>
+<span>            rmse_mdl2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'>calc_rmse</span><span class='op'>(</span><span class='va'>model2</span>, <span class='va'>o2sat</span><span class='op'>)</span>, digits <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span> </span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>rmse_predict_test</span>,</span>
+<span>      col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RMSE Model 1"</span>,</span>
+<span>              <span class='st'>"RMSE Model 2"</span><span class='op'>)</span>,</span>
+<span>      caption <span class='op'>=</span> <span class='st'>"Table 2: Test Data RMSE Values for Models 1 and 2"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_styling.html'>kable_styling</a></span><span class='op'>(</span>bootstrap_options <span class='op'>=</span> <span class='st'>"striped"</span>, </span>
+<span>                full_width <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span></code></pre>
 </div>
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
@@ -2669,41 +2697,40 @@ RMSE Model 2
 <p>Calculation over all folds and taking the average of RMSE values.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>rmse_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># Iterate over all 10 folds to get RMSE values and store in a dataframe</span>
-<span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>folds</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>kfold_test_df</span> <span class='op'>&lt;-</span> <span class='va'>seawater_fold</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>group</span> <span class='op'>==</span> <span class='va'>i</span><span class='op'>)</span>
-  <span class='va'>kfold_train_df</span> <span class='op'>&lt;-</span> <span class='va'>seawater_fold</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>group</span> <span class='op'>!=</span> <span class='va'>i</span><span class='op'>)</span>
-  
-  <span class='va'>kfold_mdl1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f1</span>, data <span class='op'>=</span> <span class='va'>kfold_train_df</span><span class='op'>)</span>
-  <span class='va'>kfold_mdl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f2</span>, data <span class='op'>=</span> <span class='va'>kfold_train_df</span><span class='op'>)</span>
-  
-  <span class='va'>kfold_pred_df</span> <span class='op'>&lt;-</span> <span class='va'>kfold_test_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>mdl1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>kfold_mdl1</span>, <span class='va'>kfold_test_df</span><span class='op'>)</span>,
-           mdl2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>kfold_mdl2</span>, <span class='va'>.</span><span class='op'>)</span><span class='op'>)</span>
-  
-  <span class='va'>kfold_rmse</span> <span class='op'>&lt;-</span> <span class='va'>kfold_pred_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>rmse_mdl1 <span class='op'>=</span> <span class='fu'>calc_rmse</span><span class='op'>(</span><span class='va'>mdl1</span>, <span class='va'>o2sat</span><span class='op'>)</span>,
-              rmse_mdl2 <span class='op'>=</span> <span class='fu'>calc_rmse</span><span class='op'>(</span><span class='va'>mdl2</span>, <span class='va'>o2sat</span><span class='op'>)</span><span class='op'>)</span>
-  
-  <span class='va'>rmse_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_rows</a></span><span class='op'>(</span><span class='va'>rmse_df</span>, <span class='va'>kfold_rmse</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># Use the dataframe from above to calculate the mean RMSE values for each model</span>
-<span class='va'>rmse_table</span> <span class='op'>&lt;-</span> <span class='va'>rmse_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>mean_rmse_mdl1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>rmse_mdl1</span><span class='op'>)</span>,
-            mean_rmse_mdl2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>rmse_mdl2</span><span class='op'>)</span><span class='op'>)</span> 
-
-<span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>rmse_table</span>,
-      col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Mean RMSE Model 1"</span>,
-                      <span class='st'>"Mean RMSE Model 2"</span><span class='op'>)</span>,
-      caption <span class='op'>=</span> <span class='st'>"Table 3: Average RMSE values for each model over all folds"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_styling.html'>kable_styling</a></span><span class='op'>(</span>bootstrap_options <span class='op'>=</span> <span class='st'>"striped"</span>, 
-                full_width <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rmse_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Iterate over all 10 folds to get RMSE values and store in a dataframe</span></span>
+<span><span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>folds</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='va'>kfold_test_df</span> <span class='op'>&lt;-</span> <span class='va'>seawater_fold</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>group</span> <span class='op'>==</span> <span class='va'>i</span><span class='op'>)</span></span>
+<span>  <span class='va'>kfold_train_df</span> <span class='op'>&lt;-</span> <span class='va'>seawater_fold</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>group</span> <span class='op'>!=</span> <span class='va'>i</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='va'>kfold_mdl1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f1</span>, data <span class='op'>=</span> <span class='va'>kfold_train_df</span><span class='op'>)</span></span>
+<span>  <span class='va'>kfold_mdl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f2</span>, data <span class='op'>=</span> <span class='va'>kfold_train_df</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='va'>kfold_pred_df</span> <span class='op'>&lt;-</span> <span class='va'>kfold_test_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>mdl1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>kfold_mdl1</span>, <span class='va'>kfold_test_df</span><span class='op'>)</span>,</span>
+<span>           mdl2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>kfold_mdl2</span>, <span class='va'>.</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='va'>kfold_rmse</span> <span class='op'>&lt;-</span> <span class='va'>kfold_pred_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>rmse_mdl1 <span class='op'>=</span> <span class='fu'>calc_rmse</span><span class='op'>(</span><span class='va'>mdl1</span>, <span class='va'>o2sat</span><span class='op'>)</span>,</span>
+<span>              rmse_mdl2 <span class='op'>=</span> <span class='fu'>calc_rmse</span><span class='op'>(</span><span class='va'>mdl2</span>, <span class='va'>o2sat</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='va'>rmse_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind_rows.html'>bind_rows</a></span><span class='op'>(</span><span class='va'>rmse_df</span>, <span class='va'>kfold_rmse</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='co'># Use the dataframe from above to calculate the mean RMSE values for each model</span></span>
+<span><span class='va'>rmse_table</span> <span class='op'>&lt;-</span> <span class='va'>rmse_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>mean_rmse_mdl1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>rmse_mdl1</span><span class='op'>)</span>,</span>
+<span>            mean_rmse_mdl2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>rmse_mdl2</span><span class='op'>)</span><span class='op'>)</span> </span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>rmse_table</span>,</span>
+<span>      col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Mean RMSE Model 1"</span>,</span>
+<span>                      <span class='st'>"Mean RMSE Model 2"</span><span class='op'>)</span>,</span>
+<span>      caption <span class='op'>=</span> <span class='st'>"Table 3: Average RMSE values for each model over all folds"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_styling.html'>kable_styling</a></span><span class='op'>(</span>bootstrap_options <span class='op'>=</span> <span class='st'>"striped"</span>, </span>
+<span>                full_width <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span></code></pre>
 </div>
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
@@ -2735,22 +2762,23 @@ Mean RMSE Model 2
 <p>Once we have chosen the model via cross validation (Model 2), we train our final model on our entire dataset.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>final_mdl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f2</span>, data <span class='op'>=</span> <span class='va'>calcofi_data</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>final_mdl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>f2</span>, data <span class='op'>=</span> <span class='va'>calcofi_data</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<p>Our final parameterized model: <span class="math display">\[
-\begin{aligned}
-\operatorname{o2sat} &amp;= \alpha + \beta_{1}(\operatorname{t\_deg\_c}) + \beta_{2}(\operatorname{salinity}) + \beta_{3}(\operatorname{po4u\_m})\ + \\
-&amp;\quad \beta_{4}(\operatorname{depth\_m}) + \epsilon
-\end{aligned}
-\]</span></p>
-<p>Our final parameterized model with coefficients: <span class="math display">\[
-\begin{aligned}
-\operatorname{\widehat{o2sat}} &amp;= 144.07 - 0.75(\operatorname{t\_deg\_c}) - 0.44(\operatorname{salinity}) - 37.71(\operatorname{po4u\_m})\ - \\
-&amp;\quad 0.03(\operatorname{depth\_m})
-\end{aligned}
-\]</span></p>
+Our final parameterized model coefficients:
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>final_mdl</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 5 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept) 144.       95.4        1.51  1.34e- 1
+2 t_deg_c      -0.750     0.405     -1.85  6.72e- 2
+3 salinity     -0.439     2.99      -0.147 8.83e- 1
+4 po4u_m      -37.7       2.50     -15.1   6.06e-27
+5 depth_m      -0.0320    0.0150    -2.13  3.54e- 2</code></pre>
+</div>
 <h3 id="summary">Summary</h3>
 <p>Data analysis reveals the following findings:</p>
 <ul>
@@ -2760,7 +2788,7 @@ Mean RMSE Model 2
 </ul>
 <h3 id="data-citation">Data Citation</h3>
 <p>CalCOFI data are available for use without restriction. Data downloaded from <a href="https://calcofi.org/ccdata.html" class="uri">https://calcofi.org/ccdata.html</a>. Accessed 1/10/2022.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2768,15 +2796,6 @@ Mean RMSE Model 2
 <div class="d-appendix">
 </div>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->

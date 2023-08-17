@@ -21,7 +21,6 @@ library(tidyverse)
 library(here)
 library(AICcmodavg)
 library(kableExtra)
-library(equatiomatic)
 
 ```
 
@@ -170,11 +169,10 @@ Once we have chosen the model via cross validation (Model 2), we train our final
 final_mdl <- lm(f2, data = calcofi_data)
 ```
 
-Our final parameterized model: 
-`r equatiomatic::extract_eq(final_mdl, wrap = TRUE)`
-
-Our final parameterized model with coefficients: 
-`r equatiomatic::extract_eq(final_mdl, wrap = TRUE, use_coefs = TRUE)`
+Our final parameterized model coefficients:
+```{r}
+tidy(final_mdl)
+```
 
 ### Summary
 Data analysis reveals the following findings:
